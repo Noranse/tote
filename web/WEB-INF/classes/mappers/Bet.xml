@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tote.dao.BetDao">
+
+    <resultMap id="Bet" type="tote.entity.Bet">
+        <id column="bet_Id" property="id" />
+        <result property="idUser" column="user_Id" />
+        <result property="idRes" column="res_Id" />
+        <result property="betValue" column="bet_Value" />
+    </resultMap>
+    
+    <resultMap id="BetAll" type="tote.entity.BetAll">
+        <id column="b.bet_Id" property="id" />
+        <result property="catName" column="cat_Name" />
+        <result property="eventName" column="event_Name" />
+        <result property="outcomeName" column="res_Name" />
+        <result property="betValue" column="bet_Value" />
+        <result property="resCoef" column="res_Coef" />
+        <result property="state" column="res_state" />
+    </resultMap>
+
+    <insert id="create" parameterType="tote.entity.Bet">
+        INSERT INTO bet (bet_Value, user_Id, res_Id) VALUES (#{betValue}, #{idUser}, #{idRes})
+    </insert>
+
+    <select id="read" parameterType="long" resultMap="Bet">
+        SELECT * FROM bet WHERE bet_Id = #{id}
+    </select>
+
+    <update id="update" parameterType="tote.entity.Bet">
+        UPDATE bet SET bet_Value = #{betValue}, user_Id = #{idUser}, res_Id = #{idRes} WHERE bet_Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM bet WHERE id = #{id}
+    </delete>
+
+    <select id="findAll" resultMap="Bet">
+        SELECT * FROM bet
+    </select>
+    
+    <select id="findBetAll" parameterType="long" resultMap="BetAll" >
+        SELECT
+            b.bet_Id,
+            c.cat_Name,
+            e.event_Name,
+            r.res_Name,
+            b.bet_Value,
+            r.res_Coef,
+            r.res_state
+        FROM
+            bet as b, outcome as r, event as e, category as c
+        WHERE
+            b.res_Id = r.res_Id AND r.event_Id = e.event_Id AND e.cat_Id = c.cat_Id AND b.user_Id = #{userId}
+    </select>
+
+</mapper>

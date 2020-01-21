@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tote.dao.RoleDao">
+
+    <resultMap id="Role" type="tote.entity.Role">
+        <id column="role_Id" property="id" />
+        <result property="name" column="rolename" />
+    </resultMap>
+
+    <select id="findAll" resultMap="Role">
+        SELECT * FROM roles
+    </select>
+
+    <select id="getRole" parameterType="String" resultMap="Role">
+        SELECT * FROM roles
+        WHERE rolename = #{name}
+    </select>
+
+    <delete id="deleteUsersRoles" parameterType="long">
+        DELETE FROM authorities WHERE user_Id = #{uid}
+    </delete>
+
+    <insert id="addUsersRole" parameterType="map">
+        INSERT INTO authorities (user_Id, role_Id)
+        VALUES(#{uid}, #{rid})
+    </insert>
+
+</mapper>

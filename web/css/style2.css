@@ -1,0 +1,90 @@
+body {
+	background-image: url("../images/background.jpg");
+	background-attachment: fixed;
+}
+
+.container h3 {
+	text-align: center;
+	margin: 2%;
+}
+
+.wrap {
+    padding-bottom: 16%;
+}
+
+.navbar .navbar-brand img {
+	width: 100px;
+	margin-top: -26%;
+	margin-bottom: -20%;
+}
+
+.form-add {
+	width: 200px;
+	text-align: center;
+	margin: auto;
+}
+
+.submit-btn {
+	margin-top: 3%;
+}
+
+.bs-docs-section {
+	text-align: center;
+	width: 30em;
+	margin: auto;
+	margin-top: 10em;
+}
+
+.bill {
+	margin-top: 2em;
+	width: 13%;
+}
+
+.label_for_bet_table {
+	margin-bottom: 1.5em;
+	text-align: center;
+}
+
+.btn {
+	margin-top: 1ex;
+}
+
+.carousel-inner {
+	height: 28em;
+}
+
+.carousel {
+	margin-top: 2em;
+}
+
+.nav-tabs {
+	margin-top: 2em;
+}
+
+.alert_private_cabinet {
+	margin-top: 2em;
+}
+
+.nav-tabs .container .nav .nav-item .form-inline {
+	margin-left: 20em;
+}
+
+.input-group {
+	width: 30%;
+}
+
+.label_for_bill{
+	font-size: 1.5em;
+}
+.label_for_user{
+	text-align: center;
+	margin-top: 1.5em;
+}
+
+tbody {
+    background-color: #ffffffba;
+}
+
+.img-error {
+    text-align: center;
+}

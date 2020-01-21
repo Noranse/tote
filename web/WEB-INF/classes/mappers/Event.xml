@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tote.dao.EventDao">
+
+    <resultMap id="Event" type="tote.entity.Event">
+        <id column="event_Id" property="id" />
+        <result property="name" column="event_Name" />
+        <result property="date" column="event_Date" />
+        <result property="idCategory" column="cat_Id" />
+        <collection property="results" resultMap="tote.dao.ResultDao.Result"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="Event">
+        SELECT
+                 ev.event_Id, ev.event_Name, ev.event_Date, ev.cat_Id, 
+                 oc.res_Id, oc.res_Name, oc.res_Coef, oc.event_Id, oc.res_state
+        FROM 
+            event ev 
+        LEFT JOIN outcome oc ON ev.event_Id = oc.event_Id
+    </select>
+
+    <select id="read" parameterType="java.lang.Long" resultMap="Event">
+        SELECT 
+                ev.event_Id, ev.event_Name, ev.event_Date, ev.cat_Id, 
+                oc.res_Id, oc.res_Name, oc.res_Coef, oc.event_Id, oc.res_state
+        FROM 
+            event ev 
+        LEFT JOIN outcome oc ON ev.event_Id = oc.event_Id
+        WHERE 
+            ev.event_Id = ${id}
+    </select>
+
+    <insert id="create" parameterType="tote.entity.Event">
+        INSERT INTO event (event_Name, event_Date, cat_Id) 
+        VALUES (#{name},#{date},#{idCategory})
+    </insert>
+
+    <update id="update" parameterType="tote.entity.Event">
+        UPDATE event SET event_Name = #{name}, event_Date= #{date}, cat_Id = #{idCategory} WHERE event_Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM event WHERE id = #{id}
+    </delete>
+
+</mapper>
