@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tote.dao.CategoryDao">
+
+    <resultMap id="Category" type="tote.entity.Category">
+        <id column="cat_Id" property="id" />
+        <result column="cat_Name" property="name" />
+        <collection property="events" resultMap="tote.dao.EventDao.Event" />
+    </resultMap>
+
+    <insert id="create" parameterType="tote.entity.Category">
+        INSERT INTO category (cat_Name) VALUES (#{name})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+             values IDENTITY_VAL_LOCAL()
+        </selectKey>
+    </insert>
+
+    <select id="read" resultMap="Category" parameterType="long">
+        SELECT 
+                cat.cat_Id, cat.cat_Name, 
+                ev.event_Id, ev.event_Name, ev.event_Date, ev.cat_Id, 
+                oc.res_Id, oc.res_Name, oc.res_Coef, oc.event_Id, oc.res_state
+        FROM 
+            category cat
+        LEFT JOIN event ev ON ev.cat_Id = cat.cat_Id
+        LEFT JOIN outcome oc ON oc.event_Id = ev.event_Id
+        WHERE cat_Id = #{id}
+    </select>
+    
+
+    <update id="update" parameterType="tote.entity.Category">
+        update category set cat_Name = #{name} WHERE cat_Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM category WHERE cat_id = #{id}
+    </delete>
+
+    <select id="findAll" resultMap="Category">
+         SELECT 
+                 cat.cat_Id,
+                 cat.cat_Name, 
+                 ev.event_Id,
+                 ev.event_Name,
+                 ev.event_Date,
+                 ev.cat_Id, 
+                 oc.res_Id,
+                 oc.res_Name,
+                 oc.res_Coef,
+                 oc.event_Id,
+                 oc.res_state
+        FROM 
+            category cat
+        LEFT JOIN event ev ON ev.cat_Id = cat.cat_Id
+        LEFT JOIN outcome oc ON oc.event_Id = ev.event_Id
+    </select>
+
+    <select id="eventsByCatId" resultMap="tote.dao.EventDao.Event" parameterType="long">
+        SELECT 
+                ev.event_Id, ev.event_Name, ev.event_Date, ev.cat_Id, 
+                oc.res_Id, oc.res_Name, oc.res_Coef, oc.event_Id, oc.res_state
+        FROM 
+            event e 
+        LEFT JOIN outcome oc ON e.event_Id = oc.event_Id
+        WHERE e.cat_Id = #{id}
+    </select>
+
+</mapper>
+

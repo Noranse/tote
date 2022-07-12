@@ -1,0 +1,35 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://www.springframework.org/schema/security  
+    http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http auto-config="true" authentication-manager-ref="authManager" >
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />  
+        <intercept-url pattern="/private_cabinet.html" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/addbet.html" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="*.html" access="IS_AUTHENTICATED_ANONYMOUSLY" /> 
+
+        <form-login login-page='/login.html' login-processing-url="/j_spring_security_check.html" default-target-url="/main.html"
+            always-use-default-target="false" authentication-failure-url="/login.html?error=true" username-parameter="username"
+            password-parameter="password" />
+
+        <logout logout-url="/logout.html" logout-success-url="/main.html" delete-cookies="JSESSIONID" invalidate-session="true" />
+
+        <csrf disabled="true" />
+    </http>
+
+    <authentication-manager id="authManager">
+        <authentication-provider user-service-ref="uds">
+            <password-encoder ref="encoder" />
+        </authentication-provider>
+    </authentication-manager>
+
+     <beans:bean id="encoder" class="tote.security.PlaintextPasswordEncoder" />
+
+    <beans:bean id="uds" class="tote.security.UserDetailServiceImpl">
+        <beans:property name="usrSrv" ref="userSrv" />
+    </beans:bean>
+
+</beans:beans>

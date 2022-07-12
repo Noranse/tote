@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tote.dao.ResultDao">
+
+    <resultMap id="Result" type="tote.entity.Result">
+        <id property="id" column="res_Id" />
+        <result property="name" column="res_Name" />
+        <result property="coef" column="res_Coef" />
+        <result property="idEvent" column="event_Id" />
+        <result property="state" column="res_state" />
+    </resultMap>
+    
+    <insert id="create" parameterType="tote.entity.Result">
+        INSERT INTO outcome (res_Name, res_Coef, event_Id ,res_state) VALUES (
+        #{name}, #{coef}, #{idEvent}, #{state}
+        )
+    </insert>
+
+    <select id="read" parameterType="long" resultMap="Result">
+        SELECT * FROM outcome WHERE res_Id = #{id}
+    </select>
+    
+    <update id="update" parameterType="tote.entity.Result">
+        UPDATE outcome SET
+            res_Name = #{name},
+            res_Coef = #{coef},
+            event_Id = #{idEvent},
+            res_state = #{state}
+        WHERE
+            res_Id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="long">
+        DELETE FROM outcome WHERE id = #{id}
+    </delete>
+    
+    <select id="findAll" resultMap="Result">
+        SELECT * FROM outcome
+    </select>
+    
+    <select id="findByEventId" parameterType="long" resultMap="Result">
+        SELECT * FROM outcome WHERE outcome.event_Id = #{id}
+    </select>
+
+</mapper>

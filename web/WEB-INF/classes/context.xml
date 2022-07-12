@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+        <property name="url" value="jdbc:derby:.dataBase;create=true" />
+    </bean>
+
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource" />
+        <property name="changeLog" value="classpath:db-changelog.xml" />
+    </bean>
+
+    <!-- ========== MAPPERS ========== -->
+    <bean id="resDao" class="tote.dao.mybatis.ResultMapper" parent="dao2" />
+
+    <bean id="betDao" class="tote.dao.mybatis.BetMapper" parent="dao2" />
+
+    <bean id="roleDao" class="tote.dao.mybatis.RoleMapper" parent="dao2" />
+
+    <bean id="userDao" class="tote.dao.mybatis.UserMapper" parent="dao2" />
+
+    <bean id="catDao" class="tote.dao.mybatis.CategoryMapper" parent="dao2" />
+    
+    <bean id="eventDao" class="tote.dao.mybatis.EventMapper" parent="dao2" />
+
+    <!-- ========== DAO ========== -->
+    <bean abstract="true" id="dao" class="org.springframework.jdbc.core.support.JdbcDaoSupport">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath:/mappers/*.xml" />
+    </bean>
+
+    <bean abstract="true" id="dao2" class="org.mybatis.spring.support.SqlSessionDaoSupport">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+
+     <!-- ========== Services ========== -->
+    
+    <bean id="betSrv" class="tote.service.BetServiceImpl">
+        <property name="dao" ref="betDao" />
+    </bean>
+
+    <bean id="catSrv" class="tote.service.CategoryServiceImpl">
+        <property name="dao" ref="catDao" />
+    </bean>
+
+    <bean id="eventSrv" class="tote.service.EventServiceImpl">
+        <property name="dao" ref="eventDao" />
+    </bean>
+
+    <bean id="resSrv" class="tote.service.ResultServiceImpl">
+        <property name="dao" ref="resDao" />
+    </bean>
+    
+    <bean id="userSrv" class="tote.service.UserServiceImpl">
+        <property name="userDao" ref="userDao" />
+        <property name="roleDao" ref="roleDao" />
+    </bean>
+</beans>
